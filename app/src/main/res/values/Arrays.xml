@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="unloading_menu">
+        　　 <item>Assign Location</item>
+        　　 <item>None</item>
+        　　 <item>Cancel</item>
+    </string-array>
+</resources>

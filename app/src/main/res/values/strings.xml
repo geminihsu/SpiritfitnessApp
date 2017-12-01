@@ -1,0 +1,59 @@
+<resources>
+    <string name="app_name">SpiritFitApp</string>
+
+    <!-- Activity Name -->
+    <string name="container_activity_title">Container</string>
+    <string name="scanner_activity_title">Assign Items</string>
+
+    <!-- ContainerActivity -->
+    <string name="container_txt">Container no #</string>
+    <string name="invoice_txt">Invoice no #</string>
+    <string name="total_received_txt">Total Pieces received:</string>
+    <string name="received_date_txt">Received:</string>
+    <string name="received_worker">Received By:</string>
+    <string name="entered_cs">Entered CS:</string>
+    <string name="entered_pt">Entered PT:</string>
+    <string name="scanner_btn">Scanner</string>
+
+
+    <!-- ContainerActivity Default value -->
+    <string name="container_no">MSCU9257505</string>
+    <string name="invoice_no">16022817</string>
+    <string name="received_info">PARTS;  XT185(185815)  90 PCS</string>
+    <string name="received_date">WED 11/16/2017</string>
+    <string name="received_worker_mail">rebas@spiritfitness.com</string>
+    <string name="entered_cs_info"></string>
+    <string name="entered_pt_info"></string>
+    <string name="container_dialog_title">UnLoading</string>
+    <string name="container_dialog_contain">what are you going to do?</string>
+    <string name="container_dialog_contain_none">After finishing scan the all items, the all items will assign to 000 location.</string>
+    <string name="container_dialog_contain_location">Please enter the location number.</string>
+    <string name="container_dialog_contain_location_count">How many items do you want to put the location?</string>
+
+    <!-- ContainerActivity -->
+    <string name="txt_container_location">Items Location : </string>
+    <string name="txt_container_location_code">Items Zone : </string>
+    <string name="txt_container_location_count">Items Count : </string>
+
+
+    <!-- ContainerActivity Default value-->
+    <string name="container_location">000</string>
+    <string name="container_location_code">1</string>
+    <string name="container_location_count">50</string>
+
+    <!-- global string -->
+    <string name="g_done">Done</string>
+    <string name="g_back">Back</string>
+    <string name="g_add">Add</string>
+    <string name="g_modify">Modify</string>
+    <string name="g_delete">Delete</string>
+    <string name="g_ok">OK</string>
+    <string name="g_no">NO</string>
+    <string name="g_yes">YES</string>
+    <string name="g_confirm">Confirm</string>
+    <string name="g_cancel">Cancel</string>
+    <string name="g_select_all">Select All</string>
+    <string name="language_end">.</string>
+
+
+</resources>
