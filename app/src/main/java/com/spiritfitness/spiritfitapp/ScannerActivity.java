@@ -2,6 +2,7 @@ package com.spiritfitness.spiritfitapp;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,8 @@ import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +27,10 @@ import com.spiritfitness.spiritfitapp.util.LocationHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScannerActivity extends AppCompatActivity {
+import me.dm7.barcodescanner.zbar.Result;
+import me.dm7.barcodescanner.zbar.ZBarScannerView;
+
+public class ScannerActivity extends AppCompatActivity implements ZBarScannerView.ResultHandler{
     private final String TAG = ScannerActivity.this.toString();
 
     private final int ACTIONBAR_MENU_ITEM_SUMMIT = 0x0001;
@@ -39,7 +45,10 @@ public class ScannerActivity extends AppCompatActivity {
     private TextView itemLocation;
     private TextView itemZone;
     private TextView itemCount;
+    private ViewGroup scannerView;
 
+    private IntentIntegrator integrator;
+    private ZBarScannerView mScannerView;
 
     private ContainerAdapter containerAdapter;
     @Override
@@ -71,19 +80,46 @@ public class ScannerActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(ScannerActivity.this));
         recyclerView.setAdapter(containerAdapter);
 
+       // mScannerView = new ZBarScannerView(ScannerActivity.this);
+       // scannerView.addView(mScannerView);
+
+      //  scannerView.setVisibility(View.VISIBLE);
         scannerXzing();
+    }
+
+    private void scannerXzing() {
+        IntentIntegrator integrator = new IntentIntegrator(ScannerActivity.this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+        integrator.setPrompt("Scan");
+        integrator.setCameraId(0);
+        integrator.setBeepEnabled(false);
+        integrator.setBarcodeImageEnabled(false);
+        integrator.initiateScan();
 
     }
+
 
     @Override
     protected void onResume()
     {
+        mScannerView.setResultHandler(this);
+        //mScannerView.startCamera();
 
         super.onResume();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        //mScannerView.stopCamera();
+    }
+
+
+
     private void findView()
     {
+        scannerView = (ViewGroup) findViewById(R.id.content_frame);
+
         itemLocation = (TextView) findViewById(R.id.item_location);
         itemZone = (TextView) findViewById(R.id.item_zone_code);
         itemCount = (TextView) findViewById(R.id.item_count);
@@ -91,7 +127,7 @@ public class ScannerActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
-
+        mScannerView = new ZBarScannerView(ScannerActivity.this);
 
     }
 
@@ -113,23 +149,14 @@ public class ScannerActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case  ACTIONBAR_MENU_ITEM_SUMMIT:
-               scannerXzing();
+
                 break;
 
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void scannerXzing()
-    {
-        IntentIntegrator integrator = new IntentIntegrator(ScannerActivity.this);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
-        integrator.setPrompt("Scan");
-        integrator.setCameraId(0);
-        integrator.setBeepEnabled(false);
-        integrator.setBarcodeImageEnabled(false);
-        integrator.initiateScan();
-    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
@@ -138,22 +165,63 @@ public class ScannerActivity extends AppCompatActivity {
                 Log.d("MainActivity", "Cancelled scan");
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
+
                 String info = result.toString();
                 int contentIndex = info.indexOf("containers");
 
                 Item item = new Item();
                 item.setSN(info.substring(contentIndex + 28,contentIndex + 42));
-                item.setLocation("000");
-                item.setZoneCoe(1);
+                //item.setSN(rawResult.getContents());
+                item.setLocation(location);
+                item.setZoneCoe(zoneCode);
 
                 items.add(item);
                 containerAdapter.notifyItemRangeChanged(items.size()-1, items.size());
-                Log.d("MainActivity", "Scanned");
+                itemCount.setText(getString(R.string.txt_container_location_count)+items.size()+"/" + count);
+
                 Toast.makeText(this, "Scanned: " + result.toString(), Toast.LENGTH_LONG).show();
+                if(items.size() < count)
+                    scannerXzing();
             }
         } else {
             // This is important, otherwise the result will not be passed to the fragment
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    @Override
+    public void handleResult(Result rawResult) {
+        Toast.makeText(this, "Contents = " + rawResult.getContents() +
+                ", Format = " + rawResult.getBarcodeFormat().getName(), Toast.LENGTH_SHORT).show();
+
+
+        String info = rawResult.getContents();
+        int contentIndex = info.indexOf("containers");
+
+        Item item = new Item();
+        //item.setSN(info.substring(contentIndex + 28,contentIndex + 42));
+        item.setSN(rawResult.getContents());
+        item.setLocation(location);
+        item.setZoneCoe(zoneCode);
+
+        items.add(item);
+        containerAdapter.notifyItemRangeChanged(items.size()-1, items.size());
+        itemCount.setText(getString(R.string.txt_container_location_count)+items.size()+"/" + count);
+
+        mScannerView.stopCamera();
+        scannerView.setVisibility(View.GONE);
+            // Note:
+            // * Wait 2 seconds to resume the preview.
+            // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
+            // * I don't know why this is the case but I don't have the time to figure out.
+         /*   Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    mScannerView.resumeCameraPreview(ScannerActivity.this);
+                }
+            }, 2000);*/
+
     }
 }
