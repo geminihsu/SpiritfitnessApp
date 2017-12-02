@@ -30,7 +30,7 @@ import java.util.List;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
-public class ScannerActivity extends AppCompatActivity implements ZBarScannerView.ResultHandler{
+public class ScannerActivity extends AppCompatActivity{
     private final String TAG = ScannerActivity.this.toString();
 
     private final int ACTIONBAR_MENU_ITEM_SUMMIT = 0x0001;
@@ -45,10 +45,9 @@ public class ScannerActivity extends AppCompatActivity implements ZBarScannerVie
     private TextView itemLocation;
     private TextView itemZone;
     private TextView itemCount;
-    private ViewGroup scannerView;
+    //private ViewGroup scannerView;
 
-    private IntentIntegrator integrator;
-    private ZBarScannerView mScannerView;
+    //private ZBarScannerView mScannerView;
 
     private ContainerAdapter containerAdapter;
     @Override
@@ -102,7 +101,7 @@ public class ScannerActivity extends AppCompatActivity implements ZBarScannerVie
     @Override
     protected void onResume()
     {
-        mScannerView.setResultHandler(this);
+        //mScannerView.setResultHandler(this);
         //mScannerView.startCamera();
 
         super.onResume();
@@ -118,7 +117,7 @@ public class ScannerActivity extends AppCompatActivity implements ZBarScannerVie
 
     private void findView()
     {
-        scannerView = (ViewGroup) findViewById(R.id.content_frame);
+        //scannerView = (ViewGroup) findViewById(R.id.content_frame);
 
         itemLocation = (TextView) findViewById(R.id.item_location);
         itemZone = (TextView) findViewById(R.id.item_zone_code);
@@ -127,7 +126,7 @@ public class ScannerActivity extends AppCompatActivity implements ZBarScannerVie
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
-        mScannerView = new ZBarScannerView(ScannerActivity.this);
+        //mScannerView = new ZBarScannerView(ScannerActivity.this);
 
     }
 
@@ -149,7 +148,7 @@ public class ScannerActivity extends AppCompatActivity implements ZBarScannerVie
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case  ACTIONBAR_MENU_ITEM_SUMMIT:
-
+                scannerXzing();
                 break;
 
         }
@@ -170,7 +169,7 @@ public class ScannerActivity extends AppCompatActivity implements ZBarScannerVie
                 int contentIndex = info.indexOf("containers");
 
                 Item item = new Item();
-                item.setSN(info.substring(contentIndex + 28,contentIndex + 42));
+                item.setSN(info.substring(contentIndex + 28,contentIndex + 44));
                 //item.setSN(rawResult.getContents());
                 item.setLocation(location);
                 item.setZoneCoe(zoneCode);
@@ -189,39 +188,5 @@ public class ScannerActivity extends AppCompatActivity implements ZBarScannerVie
         }
     }
 
-    @Override
-    public void handleResult(Result rawResult) {
-        Toast.makeText(this, "Contents = " + rawResult.getContents() +
-                ", Format = " + rawResult.getBarcodeFormat().getName(), Toast.LENGTH_SHORT).show();
 
-
-        String info = rawResult.getContents();
-        int contentIndex = info.indexOf("containers");
-
-        Item item = new Item();
-        //item.setSN(info.substring(contentIndex + 28,contentIndex + 42));
-        item.setSN(rawResult.getContents());
-        item.setLocation(location);
-        item.setZoneCoe(zoneCode);
-
-        items.add(item);
-        containerAdapter.notifyItemRangeChanged(items.size()-1, items.size());
-        itemCount.setText(getString(R.string.txt_container_location_count)+items.size()+"/" + count);
-
-        mScannerView.stopCamera();
-        scannerView.setVisibility(View.GONE);
-            // Note:
-            // * Wait 2 seconds to resume the preview.
-            // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
-            // * I don't know why this is the case but I don't have the time to figure out.
-         /*   Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-                    mScannerView.resumeCameraPreview(ScannerActivity.this);
-                }
-            }, 2000);*/
-
-    }
 }
