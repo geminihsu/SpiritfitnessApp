@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 
 /**
@@ -89,13 +90,13 @@ public class Container extends RealmObject implements Serializable{
     private String EnteredCS ;
     private String EnteredPT ;
 
-    public List<Item> getItems() {
+    public RealmList<Item> getItems() {
         return items;
     }
 
-    public void setItems(List<Item> items) {
+    public void setItems(RealmList<Item> items) {
         this.items = items;
     }
 
-    private List<Item> items;
+    private RealmList<Item> items;
 }
