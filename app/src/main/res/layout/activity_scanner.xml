@@ -14,25 +14,29 @@
     android:id="@+id/container_info"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <CheckBox
+        android:id="@+id/item_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/g_select_all"
+        android:layout_weight="5"
+        />
     <TextView
         android:id="@+id/item_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:text="@string/txt_container_location"
-        />
-    <TextView
-        android:id="@+id/item_zone_code"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="@string/txt_container_location_code"
+        android:layout_weight="5"
         />
     <TextView
         android:id="@+id/item_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="5"
         android:text="@string/txt_container_location_count"
         />
 </LinearLayout>

@@ -6,18 +6,20 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
+import io.realm.RealmObject;
+
 /**
  * Created by geminihsu on 30/11/2017.
  */
 
-public class Container implements Serializable{
+public class Container extends RealmObject implements Serializable{
     private static final long serialVersionUID = 421359095565877857L;
 
-    public UUID getId() {
+    public String getId() {
         return Id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         Id = id;
     }
 
@@ -78,7 +80,7 @@ public class Container implements Serializable{
     }
 
 
-    private UUID Id;
+    private String Id;
     private String ContainerNo;
     private String InvoiceNo;
     private String PiceRecevid ;
@@ -95,5 +97,5 @@ public class Container implements Serializable{
         this.items = items;
     }
 
-    public List<Item> items;
+    private List<Item> items;
 }

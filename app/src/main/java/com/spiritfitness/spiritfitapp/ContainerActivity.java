@@ -103,22 +103,20 @@ public class ContainerActivity extends AppCompatActivity {
                 {
                     case 0:
 
-                        unloadingAssignLocation(strName,getString(R.string.container_dialog_contain_location),false);
+                        //unloadingAssignLocation(strName,getString(R.string.container_dialog_contain_location),false);
+                        Intent page = new Intent(ContainerActivity.this, ScannerActivity.class);
+                        Bundle flag = new Bundle();
+                        flag.putSerializable(BUNDLE_CONTAINER_INFO, container);
+                        //flag.putString(BUNDLE_CONTAINER_LOCATION,location);
+                        //flag.putInt(BUNDLE_CONTAINER_LOCATION_ZONE_CODE,zoneCode);
+                        //flag.putInt(BUNDLE_CONTAINER_ITEMS_COUNT, itemCount);
+                        page.putExtras(flag);
+                        //startActivityForResult(page,Constants.DEPARTURE_QUERY_BOOKMARK);
+                        //page.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(page);
                         break;
-                    case 1:
-                        AlertDialog.Builder builderInner = new AlertDialog.Builder(ContainerActivity.this);
-                        builderInner.setMessage(getString(R.string.container_dialog_contain_none));
-                        builderInner.setTitle(strName);
-                        builderInner.setPositiveButton(getString(R.string.g_confirm), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,int which) {
-                                unloadingAssignLocation(strName,getString(R.string.container_dialog_contain_location_count),true);
-                            }
-                        });
 
-                        builderInner.show();
-                        break;
-                    case 2:
+                    case 1:
 
                         break;
                 }
@@ -180,4 +178,6 @@ public class ContainerActivity extends AppCompatActivity {
 
         builder.show();
     }
+
+
 }

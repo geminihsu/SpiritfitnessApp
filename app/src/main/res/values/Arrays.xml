@@ -2,7 +2,11 @@
 <resources>
     <string-array name="unloading_menu">
         　　 <item>Assign Location</item>
-        　　 <item>None</item>
         　　 <item>Cancel</item>
+    </string-array>
+
+    <string-array name="inquiry_menu">
+        　　 <item>Model</item>
+        　　 <item>Location</item>
     </string-array>
 </resources>

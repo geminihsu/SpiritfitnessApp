@@ -2,11 +2,13 @@ package com.spiritfitness.spiritfitapp.model;
 
 import java.io.Serializable;
 
+import io.realm.RealmObject;
+
 /**
  * Created by geminihsu on 30/11/2017.
  */
 
-public class Item implements Serializable{
+public class Item extends RealmObject implements Serializable{
     private static final long serialVersionUID = 8067313536384397083L;
 
     public int getID() {
@@ -45,6 +47,8 @@ public class Item implements Serializable{
     private String SN;
     private String Location;
     private int ZoneCoe;
+
+
 
 
 }
