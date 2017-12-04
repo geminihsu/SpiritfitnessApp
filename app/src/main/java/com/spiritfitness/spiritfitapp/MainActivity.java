@@ -1,25 +1,37 @@
 package com.spiritfitness.spiritfitapp;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.spiritfitness.spiritfitapp.common.Constants;
 import com.spiritfitness.spiritfitapp.adapter.ItemAdapter;
 import com.spiritfitness.spiritfitapp.model.Item;
-import com.spiritfitness.spiritfitapp.util.ScannerHelper;
+import com.spiritfitness.spiritfitapp.util.FileHelper;
+import com.spiritfitness.spiritfitapp.util.TestContainHelper;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
     private Button receiving;
     private Button moving;
     private Button inquiry;
@@ -29,16 +41,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        String filePath = Environment.getExternalStorageDirectory()+ Constants.SDACRD_DIR_APP_ROOT;
+        FileHelper.checkSdCard(filePath);// 檢查S是否有 SD卡,並建立會用到的 SD卡路徑
+
+        checkStoragePermissions(this);
+
+
+        TestContainHelper.inital(MainActivity.this, Item.class);
+
         receiving = (Button) this.findViewById(R.id.receiving);
         receiving.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent page = new Intent(MainActivity.this, ContainerActivity.class);
-                Bundle flag = new Bundle();
-                //flag.putInt(Constants.ARG_POSITION, Constants.DEPARTURE_QUERY_BOOKMARK);
-                //page.putExtras(flag);
-                //startActivityForResult(page,Constants.DEPARTURE_QUERY_BOOKMARK);
-                //page.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(page);
                 //finish();
             }
@@ -48,12 +63,10 @@ public class MainActivity extends AppCompatActivity {
         moving.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent page = new Intent(MainActivity.this, ContainerActivity.class);
+                Intent page = new Intent(MainActivity.this, ScannerActivity.class);
                 Bundle flag = new Bundle();
-                //flag.putInt(Constants.ARG_POSITION, Constants.DEPARTURE_QUERY_BOOKMARK);
-                //page.putExtras(flag);
-                //startActivityForResult(page,Constants.DEPARTURE_QUERY_BOOKMARK);
-                //page.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                flag.putInt(Constants.Assign_TYPE, Constants.ASSIGN_MOVING);
+                page.putExtras(flag);
                 startActivity(page);
                 //finish();
             }
@@ -107,40 +120,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 final String strName = unloadingOption[which];
 
-                switch (which)
-                {
-                    case 0:
-                        ScannerHelper.scannerXzing(MainActivity.this);
-                        break;
-
-                    case 1:
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                        builder.setTitle(getString(R.string.inquiry_location));
-
-                        // Set up the input
-                        final EditText input = new EditText(MainActivity.this);
-
-                        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-                        //input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                        builder.setView(input);
-
-                        // Set up the buttons
-                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
-
-                        builder.show();
-                        break;
-                }
+                Intent page = new Intent(MainActivity.this, InQuiryActivity.class);
+                Bundle flag = new Bundle();
+                flag.putInt(Constants.INQUIRY_TYPE, which);
+                page.putExtras(flag);
+                //startActivityForResult(page,Constants.DEPARTURE_QUERY_BOOKMARK);
+                //page.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(page);
 
 
             }
@@ -173,4 +159,42 @@ public class MainActivity extends AppCompatActivity {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+
+    private void checkStoragePermissions(Activity activity) {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if(permission != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_EXTERNAL_STORAGE: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    String filePath = Environment.getExternalStorageDirectory()+Constants.SDACRD_DIR_APP_ROOT;
+                    FileHelper.checkSdCard(filePath);// 檢查S是否有 SD卡,並建立會用到的 SD卡路徑
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'switch' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+
 }

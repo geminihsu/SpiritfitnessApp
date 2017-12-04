@@ -23,14 +23,20 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.spiritfitness.spiritfitapp.adapter.ContainerAdapter;
+import com.spiritfitness.spiritfitapp.common.Constants;
 import com.spiritfitness.spiritfitapp.model.Container;
 import com.spiritfitness.spiritfitapp.adapter.ItemAdapter;
 import com.spiritfitness.spiritfitapp.model.Item;
+import com.spiritfitness.spiritfitapp.util.DbHelper;
 import com.spiritfitness.spiritfitapp.util.LocationHelper;
 import com.spiritfitness.spiritfitapp.util.ScannerHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
+
+import io.realm.RealmResults;
 
 public class ScannerActivity extends AppCompatActivity{
     private final String TAG = ScannerActivity.this.toString();
@@ -51,7 +57,9 @@ public class ScannerActivity extends AppCompatActivity{
     private TextView itemCount;
     private Menu menu;
     private CheckBox all;
+    private HashMap<String, ItemAdapter> ItemAdapterMapping = new HashMap<String, ItemAdapter>();
 
+    private int assign_type;
     //private ViewGroup scannerView;
 
     //private ZBarScannerView mScannerView;
@@ -68,7 +76,7 @@ public class ScannerActivity extends AppCompatActivity{
         if (bundle != null) {
             if (bundle.containsKey(ContainerActivity.BUNDLE_CONTAINER_INFO)){
                 container = (Container) bundle.getSerializable(ContainerActivity.BUNDLE_CONTAINER_INFO);
-                //location = LocationHelper.convertLocation(bundle.getString(ContainerActivity.BUNDLE_CONTAINER_LOCATION));
+                  //location = LocationHelper.convertLocation(bundle.getString(ContainerActivity.BUNDLE_CONTAINER_LOCATION));
                 //zoneCode = bundle.getInt(ContainerActivity.BUNDLE_CONTAINER_LOCATION_ZONE_CODE);
                 //count = bundle.getInt(ContainerActivity.BUNDLE_CONTAINER_ITEMS_COUNT);
 
@@ -77,13 +85,25 @@ public class ScannerActivity extends AppCompatActivity{
                 //itemCount.setText(getString(R.string.txt_container_location_count)+items.size()+"/" + count);
 
                 Log.d(TAG,container.getContainerNo());
+            }else if(bundle.containsKey(Constants.Assign_TYPE))
+            {
+                assign_type = bundle.getInt(Constants.Assign_TYPE);
+
             }else
             {
                 //Error!!!!
             }
         }
-        containerAdapter = new ContainerAdapter(ScannerActivity.this, container.getContainerNo(),
-                items);
+
+
+        if(assign_type == Constants.ASSIGN_RECEIVING) {
+            containerAdapter = new ContainerAdapter(ScannerActivity.this, container.getContainerNo(),
+                    items);
+        }else{
+            containerAdapter = new ContainerAdapter(ScannerActivity.this, "",
+                    items);
+
+        }
 
         recyclerView.setLayoutManager(new LinearLayoutManager(ScannerActivity.this));
         recyclerView.setAdapter(containerAdapter);
@@ -92,6 +112,7 @@ public class ScannerActivity extends AppCompatActivity{
        // scannerView.addView(mScannerView);
 
       //  scannerView.setVisibility(View.VISIBLE);
+
         ScannerHelper.scannerXzing(ScannerActivity.this);
     }
 
@@ -105,7 +126,7 @@ public class ScannerActivity extends AppCompatActivity{
         //mScannerView.startCamera();
         itemCount.setText(getString(R.string.txt_container_location_count)+items.size());
         itemLocation.setText(getString(R.string.txt_container_location)+ "Unknown");
-
+        containerAdapter.notifyDataSetChanged();
         super.onResume();
     }
 
@@ -163,12 +184,21 @@ public class ScannerActivity extends AppCompatActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        MenuItem scanner = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_SCANNER, Menu.NONE, getString(R.string.menu_container_location_add));
-        SpannableString spanString = new SpannableString(scanner.getTitle().toString());
-        spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
-        scanner.setTitle(spanString);
-        scanner.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        if(assign_type == Constants.ASSIGN_RECEIVING) {
+            MenuItem scanner = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_SCANNER, Menu.NONE, getString(R.string.menu_container_location_add));
+            SpannableString spanString = new SpannableString(scanner.getTitle().toString());
+            spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
+            scanner.setTitle(spanString);
+            scanner.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        }else
+        {
+            MenuItem scanner = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_SCANNER, Menu.NONE, getString(R.string.menu_container_location_assign));
+            SpannableString spanString = new SpannableString(scanner.getTitle().toString());
+            spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
+            scanner.setTitle(spanString);
+            scanner.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
+        }
         this.menu = menu;
         return true;
     }
@@ -291,14 +321,24 @@ public class ScannerActivity extends AppCompatActivity{
                 .setNegativeButton(getString(R.string.g_confirm), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
-                        Intent page = new Intent(ScannerActivity.this, MainActivity.class);
-                        Bundle flag = new Bundle();
-                        //flag.putInt(Constants.ARG_POSITION, Constants.DEPARTURE_QUERY_BOOKMARK);
-                        //page.putExtras(flag);
-                        //startActivityForResult(page,Constants.DEPARTURE_QUERY_BOOKMARK);
-                        page.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(page);
-                        finish();
+
+                        DbHelper dbHelper = new DbHelper(ScannerActivity.this);
+                        //database.clearDB(AccountTreeInfo.class);
+
+                        if(assign_type == Constants.ASSIGN_RECEIVING)
+                        {
+                            for (ItemAdapter itemAdapter : items) {
+                                Item item1 = itemAdapter.getItemModel();
+                                dbHelper.addItem(item1);
+                            }
+                        }else
+                        {
+                            for (ItemAdapter itemAdapter : items) {
+                                Item item1 = itemAdapter.getItemModel();
+                                dbHelper.updateItemLocation(item1.getSN(), item1.getLocation(), item1.getZoneCoe());
+                            }
+                        }
+
 
                     }
                 }).setPositiveButton(getString(R.string.g_cancel), new DialogInterface.OnClickListener() {
@@ -324,21 +364,16 @@ public class ScannerActivity extends AppCompatActivity{
                 String info = result.toString();
                 int contentIndex = info.indexOf("containers");
 
-                ItemAdapter item = new ItemAdapter();
-                Item item1 = new Item();
-                item1.setSN(info.substring(contentIndex + 28,contentIndex + 44));
-                //item.setSN(rawResult.getContents());
-                item1.setLocation("000");
-                item1.setZoneCoe(1);
-                item.setItemModel(item1);
+                String sn = info.substring(contentIndex + 28,contentIndex + 44);
+                if(assign_type == Constants.ASSIGN_RECEIVING)
+                    receivingAssignItems(sn);
+                else
+                    movingAssignItems(sn);
 
-                items.add(item);
-                containerAdapter.notifyItemRangeChanged(items.size()-1, items.size());
-                itemCount.setText(getString(R.string.txt_container_location_count)+items.size()+"/" + count);
-
+                itemCount.setText(getString(R.string.txt_container_location_count) + items.size() + "/" + count);
                 Toast.makeText(this, "Scanned: " + result.toString(), Toast.LENGTH_LONG).show();
                 //if(items.size() < count)
-                ScannerHelper.scannerXzing(ScannerActivity.this);
+                    ScannerHelper.scannerXzing(ScannerActivity.this);
             }
         } else {
             // This is important, otherwise the result will not be passed to the fragment
@@ -346,5 +381,50 @@ public class ScannerActivity extends AppCompatActivity{
         }
     }
 
+    //Add items into table
+    private void receivingAssignItems(String sn){
 
+        if(!ItemAdapterMapping.containsKey(sn)) {
+            ItemAdapter item = new ItemAdapter();
+            Item item1 = new Item();
+            item1.setID(container.getId());
+            item1.setSN(sn);
+            //item.setSN(rawResult.getContents());
+            item1.setLocation("000");
+            item1.setZoneCoe(1);
+            item1.setModelNo(sn.substring(Constants.FG_MODEL_STR_START_INDEX,Constants.FG_MODEL_STR_START_INDEX+Constants.FG_MODEL_STR_LEN));
+            item1.setFGDateIn(sn.substring(Constants.FG_DATE_IN_STR_START_INDEX,Constants.FG_DATE_IN_STR_START_INDEX+Constants.FG_DATE_IN_STR_LEN));
+            item1.setFGSerial(sn.substring(Constants.FG_SERIAL_STR_START_INDEX,Constants.FG_SERIAL_STR_START_INDEX + Constants.FG_SERIAL_STR_LEN));
+
+            item.setItemModel(item1);
+
+
+            ItemAdapterMapping.put(sn,item);
+            items.add(item);
+
+        }
+    }
+
+    //Update items into table
+    private void movingAssignItems(String sn)
+    {
+
+        DbHelper dbHelper = new DbHelper(ScannerActivity.this);
+        RealmResults<Item> itemsData =  dbHelper.queryItemsList(Constants.ITEM_SN_COLUMN, sn);
+
+        for (Item item1 : itemsData)
+        {
+            Item item2 = new Item();
+            item2.setID(item1.getID());
+            item2.setSN(item1.getSN());
+            item2.setLocation(item1.getLocation());
+            item2.setZoneCoe(item1.getZoneCoe());
+            item2.setModelNo(item1.getModelNo());
+            item2.setFGDateIn(item1.getFGDateIn());
+            item2.setFGSerial(item1.getFGSerial());
+            ItemAdapter itemAdapter = new ItemAdapter();
+            itemAdapter.setItemModel(item2);
+            items.add(itemAdapter);
+        }
+    }
 }

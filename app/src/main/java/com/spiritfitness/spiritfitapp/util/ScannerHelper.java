@@ -20,4 +20,6 @@ public class ScannerHelper {
         integrator.initiateScan();
 
     }
+
+
 }

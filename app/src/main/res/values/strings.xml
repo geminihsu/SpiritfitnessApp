@@ -4,6 +4,7 @@
     <!-- Activity Name -->
     <string name="container_activity_title">Container</string>
     <string name="scanner_activity_title">Assign Items</string>
+    <string name="inquiry_activity_title">Query Items</string>
 
     <!-- MainActivity -->
     <string name="menu_receiving">Receiving</string>
@@ -46,6 +47,12 @@
     <string name="txt_container_location_count">Count : </string>
     <string name="menu_container_location_assign">Assign</string>
     <string name="menu_container_location_add">Add</string>
+
+    <!-- InQuiryActivity -->
+    <string name="txt_inquiry_items_location">Location : </string>
+    <string name="txt_inquiry_items_zone">Items Zone : </string>
+    <string name="txt_inquiry_items_model">Items Model : </string>
+    <string name="txt_inquiry_items_quantity">Items Quantity : </string>
 
     <!-- ScannerActivity -->
     <string name="scanner_dialog_confirm">Would you like to assign the all item to the location?</string>

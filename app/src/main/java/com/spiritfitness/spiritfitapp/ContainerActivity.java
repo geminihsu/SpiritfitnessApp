@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.spiritfitness.spiritfitapp.common.Constants;
 import com.spiritfitness.spiritfitapp.model.Container;
 import com.spiritfitness.spiritfitapp.util.LocationHelper;
 
@@ -107,9 +108,7 @@ public class ContainerActivity extends AppCompatActivity {
                         Intent page = new Intent(ContainerActivity.this, ScannerActivity.class);
                         Bundle flag = new Bundle();
                         flag.putSerializable(BUNDLE_CONTAINER_INFO, container);
-                        //flag.putString(BUNDLE_CONTAINER_LOCATION,location);
-                        //flag.putInt(BUNDLE_CONTAINER_LOCATION_ZONE_CODE,zoneCode);
-                        //flag.putInt(BUNDLE_CONTAINER_ITEMS_COUNT, itemCount);
+                        flag.putInt(Constants.Assign_TYPE, Constants.ASSIGN_RECEIVING);
                         page.putExtras(flag);
                         //startActivityForResult(page,Constants.DEPARTURE_QUERY_BOOKMARK);
                         //page.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -128,56 +127,6 @@ public class ContainerActivity extends AppCompatActivity {
     }
 
 
-    private void unloadingAssignLocation(final String strName, String title, final boolean isCount)
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(ContainerActivity.this);
-        builder.setTitle(strName);
-        builder.setMessage(title);
-
-        // Set up the input
-        final EditText input = new EditText(ContainerActivity.this);
-
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        //input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        builder.setView(input);
-
-        // Set up the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(isCount)
-                {
-                    itemCount = Integer.valueOf(input.getText().toString());
-
-                    Intent page = new Intent(ContainerActivity.this, ScannerActivity.class);
-                    Bundle flag = new Bundle();
-                    flag.putSerializable(BUNDLE_CONTAINER_INFO, container);
-                    flag.putString(BUNDLE_CONTAINER_LOCATION,location);
-                    flag.putInt(BUNDLE_CONTAINER_LOCATION_ZONE_CODE,zoneCode);
-                    flag.putInt(BUNDLE_CONTAINER_ITEMS_COUNT, itemCount);
-                    page.putExtras(flag);
-                    //startActivityForResult(page,Constants.DEPARTURE_QUERY_BOOKMARK);
-                    //page.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(page);
-                }else {
-                    location = input.getText().toString();
-                    zoneCode = LocationHelper.MapZoneCode(location);
-
-                    if(zoneCode != -1 ) {
-                        unloadingAssignLocation(strName, getString(R.string.container_dialog_contain_location_count), true);
-                    }
-                }
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
-    }
 
 
 }
