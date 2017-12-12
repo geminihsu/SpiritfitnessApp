@@ -24,6 +24,8 @@ public class Constants {
     public static String SERIAL_NUMBERS = "Serial Numbers:";
     public static String LOCATTION = "Location:";
 
+    public static int SN_LIMIT_LEN = 16;
+
     //Zone mapping Table key : zone number, value : location number
     public static int ZONE_CODE_LEN_LIMIT = 3;
     public static int ZONE_CODE_1 = 1;
