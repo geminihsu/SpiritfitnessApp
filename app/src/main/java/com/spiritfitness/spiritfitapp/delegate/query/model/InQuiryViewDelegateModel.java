@@ -5,19 +5,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentResult;
-import com.google.zxing.qrcode.decoder.Mode;
 import com.spiritfitness.spiritfitapp.common.Constants;
 import com.spiritfitness.spiritfitapp.InQuiryActivity;
 import com.spiritfitness.spiritfitapp.R;
 import com.spiritfitness.spiritfitapp.adapter.ContainerAdapter;
 import com.spiritfitness.spiritfitapp.adapter.ItemAdapter;
 import com.spiritfitness.spiritfitapp.delegate.query.InQuiryViewDelegateBase;
-import com.spiritfitness.spiritfitapp.model.Container;
 import com.spiritfitness.spiritfitapp.model.FGModel;
 import com.spiritfitness.spiritfitapp.model.Item;
 import com.spiritfitness.spiritfitapp.util.DbHelper;
-import com.spiritfitness.spiritfitapp.util.LocationHelper;
-import com.spiritfitness.spiritfitapp.util.ScannerHelper;
+import com.spiritfitness.spiritfitapp.util.XzingScannerHelper;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -42,7 +39,7 @@ public class InQuiryViewDelegateModel extends InQuiryViewDelegateBase {
 
     @Override
     public void setInitialActivity() {
-        ScannerHelper.scannerXzing(inQuiryActivity);
+        XzingScannerHelper.scannerXzing(inQuiryActivity);
         queryByTitle.setText(inQuiryActivity.getString(R.string.txt_inquiry_items_location));
         queryQuantity.setText(inQuiryActivity.getString(R.string.txt_inquiry_items_quantity));
 

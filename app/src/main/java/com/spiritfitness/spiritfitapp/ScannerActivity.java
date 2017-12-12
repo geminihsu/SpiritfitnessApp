@@ -29,12 +29,11 @@ import com.spiritfitness.spiritfitapp.adapter.ItemAdapter;
 import com.spiritfitness.spiritfitapp.model.Item;
 import com.spiritfitness.spiritfitapp.util.DbHelper;
 import com.spiritfitness.spiritfitapp.util.LocationHelper;
-import com.spiritfitness.spiritfitapp.util.ScannerHelper;
+import com.spiritfitness.spiritfitapp.util.XzingScannerHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 import io.realm.RealmResults;
 
@@ -113,7 +112,7 @@ public class ScannerActivity extends AppCompatActivity{
 
       //  scannerView.setVisibility(View.VISIBLE);
 
-        ScannerHelper.scannerXzing(ScannerActivity.this);
+        XzingScannerHelper.scannerXzing(ScannerActivity.this);
     }
 
 
@@ -373,7 +372,7 @@ public class ScannerActivity extends AppCompatActivity{
                 itemCount.setText(getString(R.string.txt_container_location_count) + items.size() + "/" + count);
                 Toast.makeText(this, "Scanned: " + result.toString(), Toast.LENGTH_LONG).show();
                 //if(items.size() < count)
-                    ScannerHelper.scannerXzing(ScannerActivity.this);
+                    XzingScannerHelper.scannerXzing(ScannerActivity.this);
             }
         } else {
             // This is important, otherwise the result will not be passed to the fragment
