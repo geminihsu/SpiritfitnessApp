@@ -6,7 +6,6 @@ import com.google.zxing.integration.android.IntentResult;
 import com.spiritfitness.spiritfitapp.InQuiryActivity;
 import com.spiritfitness.spiritfitapp.adapter.ContainerAdapter;
 import com.spiritfitness.spiritfitapp.adapter.ItemAdapter;
-import com.spiritfitness.spiritfitapp.util.ScannerHelper;
 
 import java.util.List;
 

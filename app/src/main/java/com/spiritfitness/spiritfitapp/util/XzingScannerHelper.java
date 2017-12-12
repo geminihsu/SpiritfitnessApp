@@ -9,7 +9,7 @@ import com.spiritfitness.spiritfitapp.ScannerActivity;
  * Created by geminihsu on 02/12/2017.
  */
 
-public class ScannerHelper {
+public class XzingScannerHelper {
     public static void scannerXzing(Activity _activity) {
         IntentIntegrator integrator = new IntentIntegrator(_activity);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
