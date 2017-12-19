@@ -48,7 +48,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         TestContainHelper.inital(MainActivity.this, Item.class);
+        setViewById();
 
+    }
+
+    private void setViewById()
+    {
         receiving = (Button) this.findViewById(R.id.receiving);
         receiving.setOnClickListener(new View.OnClickListener() {
             @Override

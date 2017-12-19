@@ -11,6 +11,7 @@ public class Constants {
 
 
     final public static String SDACRD_DIR_DB_FILE_NAME = "SpiritFitness.realm";
+    final public static String SPIRIT_FITINESS_WEB_URL = "http://172.16.2.109:5000";
 
     public static String APP_NAME = "SpiritFitApp";
     //After scanner the all container, the Container excel file column name ex: MSCU9257505---scanned (16022817)
