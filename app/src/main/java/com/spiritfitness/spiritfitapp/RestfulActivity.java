@@ -29,6 +29,7 @@ public class RestfulActivity extends AppCompatActivity {
     private Button btnGetItemById;
     private Button btnPostItem;
     private Button btnPutItem;
+    private Button btnDeteleItem;
 
 
     private   SpiritfitAPI apiInterface;
@@ -47,6 +48,8 @@ public class RestfulActivity extends AppCompatActivity {
         btnGetItems = (Button) this.findViewById(R.id.getItem);
         btnGetItemById = (Button) this.findViewById(R.id.getItemById);
         btnPostItem = (Button) this.findViewById(R.id.postItem);
+        btnPutItem = (Button) this.findViewById(R.id.putItem);
+        btnDeteleItem = (Button) this.findViewById(R.id.deleteItem);
     }
 
     private void setLister(){
@@ -112,7 +115,7 @@ public class RestfulActivity extends AppCompatActivity {
                 /**
                  POST name and job Url encoded.
                  **/
-                Call<Itembean> call3 = apiInterface.doCreateItemWithField(92,"1858151709001848","051");
+                Call<Itembean> call3 = apiInterface.doCreateItemWithField(92,"1858151709001848","2017-12-19 13:16:53.363", "051","185815");
                 call3.enqueue(new Callback<Itembean>() {
                     @Override
                     public void onResponse(Call<Itembean> call, Response<Itembean> response) {
@@ -121,6 +124,54 @@ public class RestfulActivity extends AppCompatActivity {
                     }
 
                     @Override                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+                    public void onFailure(Call<Itembean> call, Throwable t) {
+                        call.cancel();
+                    }
+                });
+            }
+        });
+
+        btnDeteleItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Call<Itembean> call2 = apiInterface.doDeleteItem(92);
+                call2.enqueue(new Callback<Itembean>() {
+                    @Override
+                    public void onResponse(Call<Itembean> call, Response<Itembean> response) {
+
+                        Itembean feed = response.body();
+                        String sn = feed.SN;
+                        String location = feed.Location;
+                        Toast.makeText(getApplicationContext(), sn + " sn\n" + location + " location\n", Toast.LENGTH_SHORT).show();
+
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Itembean> call, Throwable t) {
+                        call.cancel();
+                    }
+                });
+
+            }
+        });
+
+        btnPutItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /**
+                 PUT name and job Url encoded.
+                 **/
+                Call<Itembean> call3 = apiInterface.doUpdateItemWithField(92,92,"1858151709001848","2017-12-19 13:16:53.363", "062","185815");
+                call3.enqueue(new Callback<Itembean>() {
+                    @Override
+                    public void onResponse(Call<Itembean> call, Response<Itembean> response) {
+                        Itembean itembean = response.body();
+                        //Log.e(TAG, itembean.SN);
+                    }
+
+                    @Override
                     public void onFailure(Call<Itembean> call, Throwable t) {
                         call.cancel();
                     }

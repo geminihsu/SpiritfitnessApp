@@ -17,20 +17,14 @@ public class Itembean {
 
     @SerializedName("seq")
     public Integer seq;
-    @SerializedName("saleOrderNo")
-    public String saleOrderNo;
     @SerializedName("SN")
     public String SN;
-    @SerializedName("ModelNo")
-    public String ModelNo;
+    @SerializedName("date")
+    public String date;
     @SerializedName("Location")
     public String Location;
-    @SerializedName("dateIn")
-    public String dateIn;
-    @SerializedName("dateOut")
-    public String dateOut;
-    @SerializedName("trackingNo")
-    public String trackingNo;
+    @SerializedName("ModelNo")
+    public String ModelNo;
 
 
     @Override
