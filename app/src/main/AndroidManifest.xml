@@ -23,7 +23,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RestfulActivity">
+        <activity android:name=".PickUpZoneActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,12 +41,10 @@
         <activity
             android:name=".InQuiryActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/container_activity_title" />
-        <activity
-            android:name=".BluetoothScanner"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/bluetooth_activity_title" />
+            android:label="@string/container_activity_title" /><![CDATA[
         >
+
+    ]]>
     </application>
 
 </manifest>

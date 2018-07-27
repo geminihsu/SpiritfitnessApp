@@ -58,7 +58,12 @@
             android:layout_height="wrap_content"
             android:text="DeleteItem"
             />
-
+        <Button
+            android:id="@+id/pickupItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pickup"
+            />
     </LinearLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

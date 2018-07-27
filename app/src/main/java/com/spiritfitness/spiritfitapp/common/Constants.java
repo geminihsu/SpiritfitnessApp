@@ -1,5 +1,9 @@
 package com.spiritfitness.spiritfitapp.common;
 
+import com.spiritfitness.spiritfitapp.model.PickUpZoneMap;
+
+import java.util.List;
+
 /**
  * Created by geminihsu on 01/12/2017.
  */
@@ -11,7 +15,7 @@ public class Constants {
 
 
     final public static String SDACRD_DIR_DB_FILE_NAME = "SpiritFitness.realm";
-    final public static String SPIRIT_FITINESS_WEB_URL = "http://172.16.2.109:5000";
+    final public static String SPIRIT_FITNESS_WEB_URL = "http://172.16.2.6";
 
     public static String APP_NAME = "SpiritFitApp";
     //After scanner the all container, the Container excel file column name ex: MSCU9257505---scanned (16022817)
@@ -74,6 +78,8 @@ public class Constants {
     public static String INQUIRY_TYPE = "type";
     public static int INQUIRY_MODEL = 0;
     public static int INQUIRY_LOCATION = 1;
+
+    public static String PICK_UP_DATA = "Pickup";
 
 
 }

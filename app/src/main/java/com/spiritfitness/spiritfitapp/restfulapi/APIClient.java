@@ -1,7 +1,5 @@
 package com.spiritfitness.spiritfitapp.restfulapi;
 
-import android.provider.SyncStateContract;
-
 import com.spiritfitness.spiritfitapp.common.Constants;
 
 import okhttp3.OkHttpClient;
@@ -22,7 +20,7 @@ public class APIClient {
 
 
         retrofit = new Retrofit.Builder()
-                .baseUrl(Constants.SPIRIT_FITINESS_WEB_URL)
+                .baseUrl(Constants.SPIRIT_FITNESS_WEB_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();

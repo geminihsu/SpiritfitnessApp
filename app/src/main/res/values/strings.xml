@@ -6,6 +6,7 @@
     <string name="scanner_activity_title">Assign Items</string>
     <string name="inquiry_activity_title">Query Items</string>
     <string name="bluetooth_activity_title">Pair BlueTooth Device</string>
+    <string name="pickup_activity_title">Pick up model from zone2</string>
 
     <!-- MainActivity -->
     <string name="menu_receiving">Receiving</string>

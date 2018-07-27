@@ -7,9 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.spiritfitness.spiritfitapp.restfulapi.ItemList;
+import com.spiritfitness.spiritfitapp.model.PickUpZoneMap;
+import com.spiritfitness.spiritfitapp.restful.callback.ModelZoneMapCallback;
 import com.spiritfitness.spiritfitapp.restfulapi.Itembean;
-import com.spiritfitness.spiritfitapp.restfulapi.SpiritfitAPI;
+import com.spiritfitness.spiritfitapp.restful.callback.InventoryCallback;
 import com.spiritfitness.spiritfitapp.restfulapi.APIClient;
 
 import java.util.List;
@@ -30,15 +31,18 @@ public class RestfulActivity extends AppCompatActivity {
     private Button btnPostItem;
     private Button btnPutItem;
     private Button btnDeteleItem;
+    private Button btnPickUpItem;
 
 
-    private   SpiritfitAPI apiInterface;
+    private InventoryCallback apiInterface;
+    private ModelZoneMapCallback modelZoneMapCallback;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restful);
 
-        apiInterface = APIClient.getClient().create(SpiritfitAPI.class);
+        apiInterface = APIClient.getClient().create(InventoryCallback.class);
+        modelZoneMapCallback= APIClient.getClient().create(ModelZoneMapCallback.class);
         setViewById();
         setLister();
     }
@@ -50,6 +54,7 @@ public class RestfulActivity extends AppCompatActivity {
         btnPostItem = (Button) this.findViewById(R.id.postItem);
         btnPutItem = (Button) this.findViewById(R.id.putItem);
         btnDeteleItem = (Button) this.findViewById(R.id.deleteItem);
+        btnPickUpItem = (Button) this.findViewById(R.id.pickupItem);
     }
 
     private void setLister(){
@@ -163,7 +168,7 @@ public class RestfulActivity extends AppCompatActivity {
                 /**
                  PUT name and job Url encoded.
                  **/
-                Call<Itembean> call3 = apiInterface.doUpdateItemWithField(92,92,"1858151709001848","2017-12-19 13:16:53.363", "062","185815");
+                Call<Itembean> call3 = apiInterface.doUpdateItemWithField(92,92,"1858151709001849","2017-12-19 13:16:53.363", "062","185815");
                 call3.enqueue(new Callback<Itembean>() {
                     @Override
                     public void onResponse(Call<Itembean> call, Response<Itembean> response) {
@@ -173,6 +178,31 @@ public class RestfulActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<Itembean> call, Throwable t) {
+                        call.cancel();
+                    }
+                });
+            }
+        });
+
+        btnPickUpItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /**
+                 PUT name and job Url encoded.
+                 **/
+                Call<List<PickUpZoneMap>> call3 = modelZoneMapCallback.getPickUpByZone(2);
+                call3.enqueue(new Callback<List<PickUpZoneMap>>() {
+                    @Override
+                    public void onResponse(Call<List<PickUpZoneMap>> call, Response<List<PickUpZoneMap>> response) {
+                        List<PickUpZoneMap> itemList = response.body();
+                        for (PickUpZoneMap bean : itemList) {
+                            //Toast.makeText(getApplicationContext(), "id : " + bean.seq + " name: " + bean.SN + " " + bean.Location , Toast.LENGTH_SHORT).show();
+                            Log.e(TAG,"Model no. : " + bean.ModelNo + " location: " + bean.Location + " " + bean.Location);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<PickUpZoneMap>> call, Throwable t) {
                         call.cancel();
                     }
                 });

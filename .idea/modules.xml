@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/App.iml" filepath="$PROJECT_DIR$/App.iml" />
       <module fileurl="file://C:\Users\gemini\StudioProjects\SpiritfitnessApp\SpiritFitApp.iml" filepath="C:\Users\gemini\StudioProjects\SpiritfitnessApp\SpiritFitApp.iml" />
-      <module fileurl="file://$PROJECT_DIR$/SpiritfitnessApp.iml" filepath="$PROJECT_DIR$/SpiritfitnessApp.iml" />
+      <module fileurl="file://C:\Users\geminih\Documents\App\SpiritfitnessApp.iml" filepath="C:\Users\geminih\Documents\App\SpiritfitnessApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
