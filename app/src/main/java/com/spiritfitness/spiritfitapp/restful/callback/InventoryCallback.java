@@ -1,11 +1,10 @@
 package com.spiritfitness.spiritfitapp.restful.callback;
 
-import com.spiritfitness.spiritfitapp.restfulapi.Itembean;
+import com.spiritfitness.spiritfitapp.restfulapi.ZoneItemInfo;
 
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -25,21 +24,21 @@ public interface InventoryCallback {
     @Headers("Content-Type: application/json")
 
     @GET("/api/FGInventory")
-    Call<List<Itembean>> doGetItemList();
+    Call<List<ZoneItemInfo>> doGetItemList();
 
     @GET("/api/FGInventory?")
-    Call<Itembean> doGetItem(@Query("id") int id);
+    Call<ZoneItemInfo> doGetItem(@Query("id") int id);
 
     @DELETE("/api/FGInventory?")
-    Call<Itembean> doDeleteItem(@Query("id") int id);
+    Call<ZoneItemInfo> doDeleteItem(@Query("id") int id);
 
     @FormUrlEncoded
     @POST("/api/FGInventory?")
-    Call<Itembean> doCreateItemWithField(@Field("seq") int seq, @Field("SN") String sn, @Field("Date") String date, @Field("Location") String location, @Field("ModelNo") String model_no);
+    Call<ZoneItemInfo> doCreateItemWithField(@Field("seq") int seq, @Field("SN") String sn, @Field("Date") String date, @Field("Location") String location, @Field("ModelNo") String model_no);
 
 
     @FormUrlEncoded
     @PUT("/api/FGInventory?")
-    Call<Itembean> doUpdateItemWithField(@Query("id") int id, @Field("seq") int seq, @Field("SN") String sn, @Field("Date") String date, @Field("Location") String location, @Field("ModelNo") String model_no);
+    Call<ZoneItemInfo> doUpdateItemWithField(@Query("id") int id, @Field("seq") int seq, @Field("SN") String sn, @Field("Date") String date, @Field("Location") String location, @Field("ModelNo") String model_no);
 
 }
