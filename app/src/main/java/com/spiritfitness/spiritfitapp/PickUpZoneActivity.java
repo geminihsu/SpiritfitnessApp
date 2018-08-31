@@ -1,6 +1,7 @@
 package com.spiritfitness.spiritfitapp;
 
 import android.app.ProgressDialog;
+import android.content.pm.ActivityInfo;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -38,7 +39,7 @@ public class PickUpZoneActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pick_up_zone);
-
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         pickupData = new  ArrayList<PickUpZoneMap>();
         mRecyclerView= (RecyclerView) findViewById(R.id.recyclerView);
        // listView = (ListView) findViewById(R.id.listView1);

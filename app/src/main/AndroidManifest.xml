@@ -33,6 +33,7 @@
         <activity
             android:name=".ContainerActivity"
             android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
             android:label="@string/container_activity_title" />
         <activity
             android:name=".ScannerActivity"
